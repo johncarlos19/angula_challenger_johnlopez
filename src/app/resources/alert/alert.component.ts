@@ -11,11 +11,11 @@ export class AlertComponent {
   }
 
   presentAlert(message){
-    Swal.fire('Successful', message, 'success')
+    Swal.fire('Error', message, 'success')
 
   }
   presentErrorAlert(message){
-    Swal.fire('Successful', message, 'error')
+    Swal.fire('Error', message, 'error')
 
   }
 }

@@ -35,6 +35,8 @@ export class WeatherComponent  implements OnInit{
    chart: any;
    chartline: any;
 
+   error= false;
+
   listShow=[]
 
   listTempChart=[]
@@ -75,7 +77,7 @@ export class WeatherComponent  implements OnInit{
             settings: {
               arrows: false,
               centerMode: true,
-              centerPadding: '40px',
+              centerPadding: '10px',
               slidesToShow: 3
             }
           },
@@ -84,7 +86,7 @@ export class WeatherComponent  implements OnInit{
             settings: {
               arrows: false,
               centerMode: true,
-              centerPadding: '40px',
+              centerPadding: '10px',
               slidesToShow: 1
             }
           }
@@ -185,16 +187,27 @@ export class WeatherComponent  implements OnInit{
   }
 
     ngOnInit() {
+      try {
+      $('.center').slick('unslick');
+
+      } catch (error) {
+
+      }
+
       let enco = false;
       this.sub = this.activatedroute.paramMap.subscribe((params) => {
         console.log(params);
         this.id = params.get('id');
       });
+      this.listShow=[]
+
+      this.listTempChart=[]
 
       this.listCPoint.forEach((element,i) => {
         if(element.gridId==this.id){
           enco=true
           this.servicefetch.weatherrecuest(element).subscribe((data: any)=>{
+            this.error = false
           this.listCPoint[i].data=data
         console.log(data)
 
@@ -263,6 +276,12 @@ export class WeatherComponent  implements OnInit{
 
         console.log('echo ',datause,datause1)
         setTimeout(() => {
+          try {
+             $('.center').slick('unslick');
+          } catch (error) {
+
+          }
+
 
            $('.center').slick({
           centerMode: true,
@@ -298,6 +317,7 @@ export class WeatherComponent  implements OnInit{
 
         },
         (error) => {
+          this.error = true
           // Handle errors
           if (error.status ===  500 || error.status === 502 ) {
             this.alert.presentErrorAlert('Internal Server Error: '+JSON.stringify(error), );
