@@ -1,0 +1,264 @@
+
+<link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
+<ng-container >
+  <div class="page-header" >
+    <div class="page-block">
+      <div class="row align-items-center">
+        <div class="col-md-12">
+          <div class="page-header-title">
+            <ng-container
+
+            >
+              <h5 class="m-b-10" >
+                Weather
+              </h5>
+            </ng-container>
+          </div>
+          <ul class="breadcrumb">
+            <li class="breadcrumb-item">
+              <a [routerLink]="['/home']">Dashboard</a>
+            </li>
+            <ng-container >
+              <li class="breadcrumb-item" >
+                <a [routerLink]="'/home'">Home</a>
+              </li>
+
+            </ng-container>
+            <ng-container >
+              <li class="breadcrumb-item" >
+                <a href="javascript:">Weather</a>
+              </li>
+
+            </ng-container>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-container>
+
+
+
+<div class="row">
+  <div class="col-xl-12 col-12">
+    <app-card [hidHeader]="true">
+
+
+      <div class="row">
+        <div class="col-xl-12 col-12">
+          <div class="btn-group mb-2 me-2" ngbDropdown [placement]="'bottom-right'">
+            <button class="btn btn-outline-primary" ngbDropdownToggle type="button">
+              Weather Time
+            </button>
+            <div ngbDropdownMenu>
+              <a class="dropdown-item" href="javascript:" (click)="changeTime('Day')">Day</a>
+              <a class="dropdown-item" href="javascript:"  (click)="changeTime('Night')">Night</a>
+
+            </div>
+          </div>
+        </div>
+        <div class="col-xl-12 col-12">
+        </div>
+        <div  class="center">
+          <ng-container  *ngFor="let item of listShow, let i = index" >
+            <div style="margin-left: 30px !important;margin-right: 30px !important;">
+              <div class="card night" *ngIf="((item.name.includes('night') || item.name.includes('Night')) && time=='Night')" >
+                <div class="container">
+                  <div  *ngIf="item.shortForecast.includes('Cloud') || item.shortForecast.includes('Rain')" class="cloud front">
+                    <span class="left-front cloudly"></span>
+                    <span *ngIf="item.shortForecast.includes('Rain')" class="left-frontrain "></span>
+                    <span class="right-front cloudly"></span>
+                    <span *ngIf="item.shortForecast.includes('Rain')"  class="right-frontrain "></span>
+                  </div>
+                  <span *ngIf="!item.shortForecast.includes('Rain')"class="moon "></span>
+                  <span *ngIf="!item.shortForecast.includes('Rain')" class="moon "></span>
+                  <div *ngIf="item.shortForecast.includes('Cloudy')" class="cloud back">
+                    <span class="left-back cloudly"></span>
+                    <span class="right-back cloudly"></span>
+                  </div>
+                </div>
+
+                <div class="card-header" style="color: white !important;    padding-left: 0px;
+                padding-top: 0px;">
+                  <span style="color: white !important;">{{item.shortForecast}}<br></span>
+                  <span style="color: white !important;">{{'Wind: '+item.windSpeed}}</span>
+                </div>
+
+                <span class="temp" style="color: white !important;">{{item.temperature+'°'+item.temperatureUnit}}</span>
+                <div class="temp-scale">
+                  <span style="color: white !important;">{{item.name}}</span>
+                </div>
+                <!-- <div class="temp-scale">
+                  <span>Celcius</span>
+                </div> -->
+              </div>
+
+              <div class="card day" *ngIf="(!item.name.includes('night') && !item.name.includes('Night') && item.shortForecast.includes('Sunny') && time=='Day')">
+                <div class="container">
+                  <div  *ngIf="item.shortForecast.includes('Cloud')" class="cloud front">
+                    <span class="left-front cloudly"></span>
+                    <span class="right-front cloudly"></span>
+                  </div>
+                  <span class="sun "></span>
+                  <span class="sun sunshine"></span>
+                  <div  *ngIf="item.shortForecast.includes('Cloud')"class="cloud back">
+                    <span class="left-back cloudly"></span>
+                    <span class="right-back cloudly"></span>
+                  </div>
+                </div>
+
+                <div class="card-header" style=" padding-left: 0px;
+                padding-top: 0px;">
+                  <span>{{item.shortForecast}}<br></span>
+                  <span>{{'Wind: '+item.windSpeed}}</span>
+                </div>
+
+                <span class="temp">{{item.temperature+'°'+item.temperatureUnit}}</span>
+                <div class="temp-scale">
+                  <span>{{item.name}}</span>
+                </div>
+                <!-- <div class="temp-scale">
+                  <span>Celcius</span>
+                </div> -->
+              </div>
+
+              <div class="card cloudly" *ngIf="(!item.name.includes('night') && !item.name.includes('Night') && item.shortForecast.includes('Rain')  && time=='Day')">
+                <div class="container">
+                  <div  *ngIf="item.shortForecast.includes('Cloud') || item.shortForecast.includes('Rain')" class="cloud front">
+                    <span class="left-front cloudly"></span>
+                    <span *ngIf="item.shortForecast.includes('Rain')" class="left-frontrain "></span>
+                    <span class="right-front cloudly"></span>
+                    <span *ngIf="item.shortForecast.includes('Rain')"  class="right-frontrain "></span>
+                  </div>
+
+                  <div  *ngIf="item.shortForecast.includes('Cloud') || item.shortForecast.includes('Rain')"class="cloud back">
+                    <span class="left-back cloudly"></span>
+                    <span class="right-back cloudly"></span>
+                  </div>
+                </div>
+
+                <div class="card-header" style=" padding-left: 0px;
+                padding-top: 0px;">
+                  <span>{{item.shortForecast}}<br></span>
+                  <span>{{'Wind: '+item.windSpeed}}</span>
+                </div>
+
+                <span class="temp">{{item.temperature+'°'+item.temperatureUnit}}</span>
+                <div class="temp-scale">
+                  <span>{{item.name}}</span>
+                </div>
+                <!-- <div class="temp-scale">
+                  <span>Celcius</span>
+                </div> -->
+              </div>
+            </div>
+          </ng-container>
+
+        </div>
+      </div>
+
+    </app-card>
+
+
+  </div>
+  <div class="col-xl-6 col-md-6 col-sm-12">
+    <app-card [cardTitle]="'Temperature Chart in Farenheit '" style="max-height: 300px;">
+      <canvas  id="MybarTemp" >{{ chart }}</canvas>
+    </app-card>
+  </div>
+
+
+  <div class="col-xl-6 col-md-6 col-sm-12">
+    <app-card [cardTitle]="'Humidity Chart in Percent'" style="max-height: 300px;">
+      <canvas  id="MyLineHum" >{{ chartline }}</canvas>
+    </app-card>
+  </div>
+
+
+
+
+
+
+  <!-- <div class="col-xl-3 col-3" *ngFor="let item of vari?.data?.properties['periods']">
+    <app-card cardTitle="{{item.name}}">
+      <div class="card night" *ngIf="item.name.includes('night') || item.name.includes('Night')" >
+        <div class="container">
+          <div class="cloud front">
+            <span class="left-front cloudly"></span>
+            <span class="right-front cloudly"></span>
+          </div>
+          <span class="moon "></span>
+          <span class="moon sunshine"></span>
+          <div class="cloud back">
+            <span class="left-back cloudly"></span>
+            <span class="right-back cloudly"></span>
+          </div>
+        </div>
+
+        <div class="card-header" style="color: white !important;    padding-left: 0px;
+        padding-top: 0px;">
+          <span style="color: white !important;">{{item.shortForecast}}<br></span>
+          <span style="color: white !important;">{{'Wind: '+item.windSpeed}}</span>
+        </div>
+
+        <span class="temp" style="color: white !important;">{{item.temperature+'°'+item.temperatureUnit}}</span>
+
+
+      </div>
+
+      <div class="card day" *ngIf="!item.name.includes('night') && !item.name.includes('Night')">
+        <div class="container">
+          <div class="cloud front">
+            <span class="left-front cloudly"></span>
+            <span class="right-front cloudly"></span>
+          </div>
+          <span class="sun "></span>
+          <span class="sun sunshine"></span>
+          <div class="cloud back">
+            <span class="left-back cloudly"></span>
+            <span class="right-back cloudly"></span>
+          </div>
+        </div>
+
+        <div class="card-header" style=" padding-left: 0px;
+        padding-top: 0px;">
+          <span>{{item.shortForecast}}<br>Tunisia</span>
+          <span>{{'Wind: '+item.windSpeed}}</span>
+        </div>
+
+        <span class="temp">{{item.temperature+'°'+item.temperatureUnit}}</span>
+
+
+      </div>
+
+    </app-card>
+  </div> -->
+</div>
+
+<!-- <p>weather works! {{id}}</p>
+
+<div class="card">
+  <div class="container">
+    <div class="cloud front">
+      <span class="left-front"></span>
+      <span class="right-front"></span>
+    </div>
+    <span class="sun sunshine"></span>
+    <span class="sun"></span>
+    <div class="cloud back">
+      <span class="left-back"></span>
+      <span class="right-back"></span>
+    </div>
+  </div>
+
+  <div class="card-header">
+    <span>Messadine, Susah<br>Tunisia</span>
+    <span>March 13</span>
+  </div>
+
+  <span class="temp">23°</span>
+
+  <div class="temp-scale">
+    <span>Celcius</span>
+  </div>
+</div> -->

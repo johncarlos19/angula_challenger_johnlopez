@@ -1,0 +1,14 @@
+[
+  {
+    "gridId":"TOP",
+    "gridX":"31",
+    "gridY":"80",
+    "name":"Kansas Forecast"
+  },
+  {
+    "gridId":"LWX",
+    "gridX":"31",
+    "gridY":"80",
+    "name":"District of Columbia Forecast"
+  }
+]

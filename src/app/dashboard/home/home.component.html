@@ -1,0 +1,63 @@
+<div class="row">
+
+  <div class="col-xl-12 col-md-12">
+    <app-card cardTitle="Global World Weather">
+      <div id="world-low" style="height: 600px"></div>
+    </app-card>
+  </div>
+
+
+
+  <div class="col-xl-12 col-md-12">
+    <app-card
+      cardTitle="Weather Points"
+      cardClass="Weather Points"
+      blockClass="px-0 py-3"
+    >
+      <div class="table-responsive">
+        <table class="table table-hover">
+          <tbody>
+            <tr class="unread" *ngFor="let aux of listCPoint">
+              <td>
+                <img
+                  class="rounded-circle"
+                  style="width: 40px"
+                  src="{{ aux?.data?.properties['periods'][0]['icon'] }}"
+                  alt="activity-user"
+                />
+              </td>
+              <td>
+                <h6 class="mb-1">{{ aux.gridId}}</h6>
+
+              </td>
+              <td>
+                <h6 class="text-muted">
+                  {{  aux.name }}
+                </h6>
+              </td>
+              <td>
+                <h6 class="text-muted">
+                  <i class="fas fa-circle f-10 m-r-15"></i
+                  >{{  aux?.data?.properties['periods'][0]['name'] }}
+                </h6>
+              </td>
+              <td>
+                <h6 class="text-muted">
+                  <i class="fas fa-circle f-10 m-r-15"></i
+                  >{{  aux?.data?.properties['periods'][0]['temperature']+' '+aux?.data?.properties['periods'][0]['temperatureUnit']  }}
+                </h6>
+              </td>
+              <td>
+               <a
+               [routerLink]="['/weather',aux.gridId]"
+                  class="label theme-bg text-white f-12 rounded-pill"
+                  >More Information</a
+                >
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </app-card>
+  </div>
+</div>
