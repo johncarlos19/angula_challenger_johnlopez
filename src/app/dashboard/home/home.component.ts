@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SharedModule } from 'src/app/theme/shared/shared.module';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
-
+import { Router } from '@angular/router';
+import { Observable } from 'rxjs';
 declare const AmCharts: any;
 
 import '../../../assets/charts/amchart/amcharts.js';
@@ -19,8 +20,10 @@ import dataJson from 'src/fake-data/map_data';
 import mapColor from 'src/fake-data/map-color-data.json';
 import colorlist from 'src/fake-data/color.json';
 import placelist from 'src/fake-data/place.json';
-import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
+import { AlertComponent } from 'src/app/resources/alert/alert.component';
+import { HttpservicesService } from 'src/app/services/httpservices.service';
+
+
 
 interface weather{
   gridId: any
@@ -41,18 +44,9 @@ export   class HomeComponent implements OnInit {
 
 listCPoint : weather[] = placelist
 public domain = 'https://api.weather.gov'
-  constructor(private http: HttpClient) { }
+  constructor( private alert: AlertComponent, private servicefetch: HttpservicesService) { }
 
 
-  weatherrecuest(aux: weather): Observable<any> {
-    // this.getCodVend();
-    // aux.codVend = DataService.codVend;
-    const serverName = this.domain + '/gridpoints/'+aux.gridId+'/'+aux.gridX+','+aux.gridY+'/forecast';
-    console.log(serverName);
-
-
-    return this.http.get<any>(serverName);
-  }
 
 
   ngOnInit() {
@@ -309,7 +303,7 @@ public domain = 'https://api.weather.gov'
 
 
     this.listCPoint.forEach((element,i) => {
-      this.weatherrecuest(element).subscribe((data: any)=>{
+      this.servicefetch.weatherrecuest(element).subscribe((data: any)=>{
         this.listCPoint[i].data=data
       console.log(data)
 
@@ -334,152 +328,23 @@ public domain = 'https://api.weather.gov'
         value: '',
       });
 
+      },
+      (error) => {
+        // Handle errors
+        if (error.status ===  500 || error.status === 502 ) {
+          this.alert.presentErrorAlert('Internal Server Error: '+JSON.stringify(error), );
+          // Additional error handling for 500 status
+        } else {
+          this.alert.presentErrorAlert('An error occurred: '+JSON.stringify(error), );
+
+        }
       })
     });
   }
 
 
 
-  sales = [
-    {
-      title: 'Daily Sales',
-      icon: 'icon-arrow-up text-c-green',
-      amount: '$249.95',
-      percentage: '67%',
-      progress: 50,
-      design: 'col-md-6',
-    },
-    {
-      title: 'Monthly Sales',
-      icon: 'icon-arrow-down text-c-red',
-      amount: '$2.942.32',
-      percentage: '36%',
-      progress: 35,
-      design: 'col-md-6',
-    },
-    {
-      title: 'Yearly Sales',
-      icon: 'icon-arrow-up text-c-green',
-      amount: '$8.638.32',
-      percentage: '80%',
-      progress: 70,
-      design: 'col-md-12',
-    },
-  ];
 
-  card = [
-    {
-      design: 'border-bottom',
-      number: '235',
-      text: 'TOTAL IDEAS',
-      icon: 'icon-zap text-c-green',
-    },
-    {
-      number: '26',
-      text: 'TOTAL LOCATIONS',
-      icon: 'icon-map-pin text-c-blue',
-    },
-  ];
 
-  social_card = [
-    {
-      design: 'col-md-12',
-      icon: 'fab fa-facebook-f text-primary',
-      amount: '12,281',
-      percentage: '+7.2%',
-      color: 'text-c-green',
-      target: '35,098',
-      progress: 60,
-      duration: '3,539',
-      progress2: 45,
-    },
-    {
-      design: 'col-md-6',
-      icon: 'fab fa-twitter text-c-blue',
-      amount: '11,200',
-      percentage: '+6.2%',
-      color: 'text-c-purple',
-      target: '34,185',
-      progress: 40,
-      duration: '4,567',
-      progress2: 70,
-    },
-    {
-      design: 'col-md-6',
-      icon: 'fab fa-google-plus-g text-c-red',
-      amount: '10,500',
-      percentage: '+5.9%',
-      color: 'text-c-blue',
-      target: '25,998',
-      progress: 80,
-      duration: '7,753',
-      progress2: 50,
-    },
-  ];
 
-  progressing = [
-    {
-      number: '5',
-      amount: '384',
-      progress: 70,
-    },
-    {
-      number: '4',
-      amount: '145',
-      progress: 35,
-    },
-    {
-      number: '3',
-      amount: '24',
-      progress: 25,
-    },
-    {
-      number: '2',
-      amount: '1',
-      progress: 10,
-    },
-    {
-      number: '1',
-      amount: '0',
-      progress: 0,
-    },
-  ];
-
-  tables = [
-    {
-      src: 'assets/images/user/avatar-1.jpg',
-      title: 'Isabella Christensen',
-      text: 'Lorem Ipsum is simply dummy',
-      time: '11 MAY 12:56',
-      color: 'text-c-green',
-    },
-    {
-      src: 'assets/images/user/avatar-2.jpg',
-      title: 'Ida Jorgensen',
-      text: 'Lorem Ipsum is simply',
-      time: '11 MAY 10:35',
-      color: 'text-c-red',
-    },
-    {
-      src: 'assets/images/user/avatar-3.jpg',
-      title: 'Mathilda Andersen',
-      text: 'Lorem Ipsum is simply dummy',
-      time: '9 MAY 17:38',
-      color: 'text-c-green',
-    },
-    {
-      src: 'assets/images/user/avatar-1.jpg',
-      title: 'Karla Soreness',
-      text: 'Lorem Ipsum is simply',
-      time: '19 MAY 12:56',
-      color: 'text-c-red',
-    },
-    {
-      src: 'assets/images/user/avatar-2.jpg',
-      title: 'Albert Andersen',
-      text: 'Lorem Ipsum is',
-      time: '21 July 12:56',
-      color: 'text-c-green',
-    },
-  ];
 }

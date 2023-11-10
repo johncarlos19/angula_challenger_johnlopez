@@ -7,6 +7,8 @@ import { LazyLoadScriptService } from 'src/app/services/lazy-load-script';
 import colorlist from 'src/fake-data/color.json';
 import placelist from 'src/fake-data/place.json';
 import Chart from 'chart.js/auto';
+import { AlertComponent } from 'src/app/resources/alert/alert.component';
+import { HttpservicesService } from 'src/app/services/httpservices.service';
 
 declare var $: any;
 
@@ -37,8 +39,8 @@ export class WeatherComponent  implements OnInit{
 
   listTempChart=[]
 
-  constructor(private activatedroute: ActivatedRoute,
-    private router: Router,private http: HttpClient,private lazyLoadService: LazyLoadScriptService){
+  constructor(private alert: AlertComponent, private activatedroute: ActivatedRoute,
+    private router: Router,private lazyLoadService: LazyLoadScriptService, private servicefetch: HttpservicesService ){
 
     }
 
@@ -90,15 +92,7 @@ export class WeatherComponent  implements OnInit{
       });
       }, 500);
     }
-  weatherrecuest(aux: weather): Observable<any> {
-    // this.getCodVend();
-    // aux.codVend = DataService.codVend;
-    const serverName = this.domain + '/gridpoints/'+aux.gridId+'/'+aux.gridX+','+aux.gridY+'/forecast';
-    console.log(serverName);
 
-
-    return this.http.get<any>(serverName);
-  }
 
 
   createChartTemperature(labels,data: any,unit ='F'){
@@ -191,6 +185,7 @@ export class WeatherComponent  implements OnInit{
   }
 
     ngOnInit() {
+      let enco = false;
       this.sub = this.activatedroute.paramMap.subscribe((params) => {
         console.log(params);
         this.id = params.get('id');
@@ -198,7 +193,8 @@ export class WeatherComponent  implements OnInit{
 
       this.listCPoint.forEach((element,i) => {
         if(element.gridId==this.id){
-          this.weatherrecuest(element).subscribe((data: any)=>{
+          enco=true
+          this.servicefetch.weatherrecuest(element).subscribe((data: any)=>{
           this.listCPoint[i].data=data
         console.log(data)
 
@@ -240,6 +236,9 @@ export class WeatherComponent  implements OnInit{
                 daytemp.push('0')
                 dayhumidy.push('0')
               }
+              }else{
+                daytemp.push(element.temperature)
+              dayhumidy.push(element.relativeHumidity.value)
               }
             if(!element.isDaytime){
               label.push('Today')
@@ -261,6 +260,8 @@ export class WeatherComponent  implements OnInit{
 
         const datause1 = {day:dayhumidy, night:nighthumidy}
         this.createChartHumidy(label,datause1)
+
+        console.log('echo ',datause,datause1)
         setTimeout(() => {
 
            $('.center').slick({
@@ -295,10 +296,23 @@ export class WeatherComponent  implements OnInit{
         }, 500);
 
 
+        },
+        (error) => {
+          // Handle errors
+          if (error.status ===  500 || error.status === 502 ) {
+            this.alert.presentErrorAlert('Internal Server Error: '+JSON.stringify(error), );
+            // Additional error handling for 500 status
+          } else {
+            this.alert.presentErrorAlert('An error occurred: '+JSON.stringify(error), );
+
+          }
         })
         }
 
       });
+      if(enco==false){
+        this.router.navigateByUrl('/nofound')
+      }
 
       //You can also use this
       //this.sub=this._Activatedroute.params.subscribe(params => {

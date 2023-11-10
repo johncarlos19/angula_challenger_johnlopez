@@ -27,6 +27,9 @@ import { HomeComponent } from './dashboard/home/home.component';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { WeatherComponent } from './dashboard/weather/weather.component';
+import { AlertComponent } from './resources/alert/alert.component';
+import { UtilidadesModule } from './resources/utilidades.module';
+import { NofoundComponent } from './dashboard/nofound/nofound.component';
 
 @NgModule({
   declarations: [
@@ -47,9 +50,12 @@ import { WeatherComponent } from './dashboard/weather/weather.component';
     ToggleFullScreenDirective,
     HomeComponent,
     WeatherComponent,
+    NofoundComponent,
+    // AlertComponent,
 
   ],
   imports: [
+    UtilidadesModule,
     BrowserModule,
     AppRoutingModule,
     FormsModule,
@@ -60,7 +66,7 @@ import { WeatherComponent } from './dashboard/weather/weather.component';
     HttpClientModule,
     BrowserAnimationsModule,
   ],
-  providers: [NavigationItem],
+  providers: [NavigationItem,AlertComponent,HttpservicesService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
